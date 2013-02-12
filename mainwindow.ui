@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>639</width>
-    <height>481</height>
+    <width>658</width>
+    <height>544</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,24 +15,174 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" colspan="2">
-     <widget class="QGroupBox" name="groupBox_3">
+    <item row="3" column="1" colspan="4">
+     <widget class="QGroupBox" name="tradeGroup">
       <property name="title">
-       <string>Learning</string>
+       <string>Trading cycle</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
-        <widget class="QDateEdit" name="dateEdit">
+        <widget class="QDateEdit" name="tradeFrom">
+         <property name="date">
+          <date>
+           <year>2010</year>
+           <month>7</month>
+           <day>25</day>
+          </date>
+         </property>
+         <property name="displayFormat">
+          <string>yyyy.MM.dd</string>
+         </property>
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" rowspan="2" colspan="2">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Coefficients</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineEdit_6"/>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLineEdit" name="lineEdit_7"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>W2=</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineEdit_5"/>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>W1=</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>W3=</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>W4=</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLineEdit" name="lineEdit_8"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QPushButton" name="start_trade">
+         <property name="text">
+          <string>Start trade</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QDateEdit" name="tradeTo">
+         <property name="date">
+          <date>
+           <year>2010</year>
+           <month>8</month>
+           <day>25</day>
+          </date>
+         </property>
+         <property name="displayFormat">
+          <string>yyyy.MM.dd</string>
+         </property>
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Profit:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QLineEdit" name="lineEdit_10"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QPushButton" name="start_all">
+      <property name="text">
+       <string>Learn and trade</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QPushButton" name="select_file">
+      <property name="text">
+       <string>Select file</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QLabel" name="select_file_label">
+      <property name="text">
+       <string>Selected file:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="2">
+     <widget class="QProgressBar" name="progressBar">
+      <property name="value">
+       <number>0</number>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" colspan="4">
+     <widget class="QGroupBox" name="trainGroup">
+      <property name="title">
+       <string>Learning cycle</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="0">
+        <widget class="QDateEdit" name="trainFrom">
+         <property name="date">
+          <date>
+           <year>2010</year>
+           <month>1</month>
+           <day>25</day>
+          </date>
+         </property>
          <property name="maximumTime">
           <time>
-           <hour>21</hour>
+           <hour>23</hour>
            <minute>59</minute>
            <second>59</second>
           </time>
          </property>
+         <property name="displayFormat">
+          <string>yyyy.MM.dd</string>
+         </property>
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
-       <item row="0" column="1" rowspan="2">
+       <item row="0" column="1" rowspan="2" colspan="2">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
           <string>Coefficients</string>
@@ -48,28 +198,12 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit"/>
-          </item>
           <item row="0" column="2">
            <widget class="QLabel" name="label_3">
             <property name="text">
              <string>W3=</string>
             </property>
            </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLineEdit" name="lineEdit_3"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>W2=</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_2"/>
           </item>
           <item row="1" column="2">
            <widget class="QLabel" name="label_4">
@@ -78,116 +212,63 @@
             </property>
            </widget>
           </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>W2=</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="trainW1"/>
+          </item>
           <item row="1" column="3">
-           <widget class="QLineEdit" name="lineEdit_4"/>
+           <widget class="QLineEdit" name="trainW4"/>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLineEdit" name="trainW3"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="trainW2"/>
           </item>
          </layout>
         </widget>
        </item>
-       <item row="0" column="2" rowspan="2">
-        <widget class="QPushButton" name="pushButton">
+       <item row="0" column="3">
+        <widget class="QPushButton" name="start_learn">
          <property name="text">
           <string>Start learn</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QDateEdit" name="dateEdit_2"/>
-       </item>
-      </layout>
-      <zorder>pushButton</zorder>
-      <zorder>groupBox</zorder>
-      <zorder>dateEdit_2</zorder>
-      <zorder>dateEdit</zorder>
-      <zorder>pushButton</zorder>
-      <zorder>groupBox</zorder>
-      <zorder>dateEdit_2</zorder>
-      <zorder>dateEdit</zorder>
-     </widget>
-    </item>
-    <item row="1" column="0" colspan="2">
-     <widget class="QGroupBox" name="groupBox_4">
-      <property name="title">
-       <string>Trading</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_4">
-       <item row="0" column="0">
-        <widget class="QDateEdit" name="dateEdit_4"/>
-       </item>
-       <item row="0" column="1" rowspan="2">
-        <widget class="QGroupBox" name="groupBox_2">
-         <property name="title">
-          <string>Coefficients</string>
+        <widget class="QDateEdit" name="trainTo">
+         <property name="date">
+          <date>
+           <year>2010</year>
+           <month>6</month>
+           <day>25</day>
+          </date>
          </property>
-         <layout class="QGridLayout" name="gridLayout_5">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>W1=</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit_5"/>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="label_7">
-            <property name="text">
-             <string>W3=</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLineEdit" name="lineEdit_7"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_6">
-            <property name="text">
-             <string>W2=</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_6"/>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="label_8">
-            <property name="text">
-             <string>W4=</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3">
-           <widget class="QLineEdit" name="lineEdit_8"/>
-          </item>
-         </layout>
+         <property name="displayFormat">
+          <string>yyyy.MM.dd</string>
+         </property>
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
-       <item row="0" column="2" rowspan="2">
-        <widget class="QPushButton" name="pushButton_2">
+       <item row="2" column="1">
+        <widget class="QLabel" name="label_9">
          <property name="text">
-          <string>Start trade</string>
+          <string>Profit:</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QDateEdit" name="dateEdit_3"/>
+       <item row="2" column="2">
+        <widget class="QLineEdit" name="trainProfit"/>
        </item>
       </layout>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QProgressBar" name="progressBar">
-      <property name="value">
-       <number>24</number>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QPushButton" name="pushButton_3">
-      <property name="text">
-       <string>Learn and trade</string>
-      </property>
      </widget>
     </item>
    </layout>
@@ -197,7 +278,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>639</width>
+     <width>658</width>
      <height>25</height>
     </rect>
    </property>

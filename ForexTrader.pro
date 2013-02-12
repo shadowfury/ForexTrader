@@ -9,10 +9,15 @@ QT       += core gui
 TARGET = ForexTrader
 TEMPLATE = app
 
+MOC_DIR=garbage
+OBJECTS_DIR=garbage
+UI_DIR=garbage
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    bid.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    bid.h
 
 FORMS    += mainwindow.ui

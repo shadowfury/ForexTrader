@@ -24,6 +24,7 @@ private slots:
     int find_first_date(QDate);
     int find_last_date(QDate);
     void learn(int date_open,int date_close);
+    void trade();
     void updateUI(int w1,int w2,int w3,int w4,double profit);
     void updateProgress(int prog);
 

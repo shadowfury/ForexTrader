@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QDate>
 #include <QFuture>
+#include <QFutureWatcher>
 #include <QtCore>
 
 double mp (double low,double high);
@@ -19,21 +20,6 @@ mainwindow::mainwindow(QWidget *parent) :
     ui(new Ui::mainwindow)
 {
     ui->setupUi(this);
-
-
-
-
-
-    bid a("2000.01.17,10:00,1.0122,1.0128,1.0114,1.0123,352");
-
-    QDate date(2012,10,10);
-
-    qDebug()<<date.toString("yyyy.MM.dd");
-
-    for (int i=0;i<10;i++){
-        date=date.addDays(-1);
-        //qDebug()<<date.toString("yyyy.MM.dd");
-    }
 
 }
 
@@ -131,137 +117,24 @@ void mainwindow::on_start_learn_clicked()
 
 void mainwindow::on_start_trade_clicked()
 {
-    int date_open=find_first_date(ui->tradeFrom->date()),date_close=find_last_date(ui->tradeTo->date());
-    for (int i=date_open;i<=date_close;i++){
-        mas_ao[i][0]=ao(vector,i);
-        mas_ao[i][1]=ao(vector,i-7);
-        mas_ao[i][2]=ao(vector,i-14);
-        mas_ao[i][3]=ao(vector,i-21);
-        //printf("a1= %f a2= %f a3= %f a4= %f i= %d\n",mas_ao[i][0],mas_ao[i][1],mas_ao[i][2],mas_ao[i][3],i);
-    }
-   //Торговля
-   FILE* output_t=fopen("output_t.txt","w+");
-   double profit=0,d=0;
-   bool open=true,close=false;
-   int c=0;
-   fprintf(output_t,
-           "==========================\nCoefficients: w1=%d w2=%d w3=%d w4=%d\n===========================\n",
-           ui->tradeW1->text().toInt(),ui->tradeW2->text().toInt(),ui->tradeW3->text().toInt(),ui->tradeW4->text().toInt());
-   for (int i=date_open;i<=date_close;i++){
-                       d=mas_ao[i][0]*(100-ui->tradeW1->text().toInt())+mas_ao[i][1]*(100-ui->tradeW2->text().toInt())+
-                               mas_ao[i][2]*(100-ui->tradeW3->text().toInt())+mas_ao[i][3]*(100-ui->tradeW4->text().toInt());
-                       if (open==true){
-                          if (d>0){
-                             c++;
-                             profit=profit-vector[i]->open();
-                             open=false;
-                             close=true;
-                             fprintf(output_t,
-                                     "--------------------------------------------\nDeal id= %d:\nOpen number in a file of quotations %d, date: %s %s, open price - %f profit= %f\n",
-                                     c,i,vector[i]->date().toString("yyyy.MM.dd").toAscii().data(),vector[i]->time().toString("hh:mm").toAscii().data(),vector[i]->open(),profit);
-                          }
-                       }
-                       if (close==true){
-                          if (d<0){
-                             profit=profit+vector[i]->close();
-                             close=false;
-                             open=true;
-                             fprintf(output_t,
-                                     "Close number in a file of quotations %d %s %s close price= %f profit= %f\n",
-                                     i,vector[i]->date().toString("yyyy.MM.dd").toAscii().data(),vector[i]->time().toString("hh:mm").toAscii().data(),vector[i]->close(),profit);
-                          }
-                       }
-                       if ((close==true)&&(i==date_close)){
-                           profit=profit+vector[i]->close();
-                           close=false;
-                           open=true;
-                           fprintf(output_t,
-                                   "Close number in a file of quotations %d %s %s close price= %f profit= %f\n",
-                                   i,vector[i]->date().toString("yyyy.MM.dd").toAscii().data(),vector[i]->time().toString("hh:mm").toAscii().data(),vector[i]->close(),profit);
-
-                       }
-   }
-   fclose(output_t);
-   ui->tradeProfit->setText(QString::number(profit));
+    trade();
 }
 
 void mainwindow::on_start_all_clicked()
 {
-    /*//2000.02.12
-    QDate dt(2006,12,23);
-    qDebug()<<"Correct id:"<<43344<<"find date id:"<<find_date(dt)<<
-              "find first date id"<<find_first_date(dt)<<"find last date id"<<find_last_date(dt);//*/
-
     int date_open=find_first_date(ui->trainFrom->date()),date_close=find_last_date(ui->trainTo->date());
     // multy-threading starts here!1!!111
 
-    QtConcurrent::run(this,&mainwindow::learn,date_open,date_close);
+    QFutureWatcher<void> *m_futureWatcher= new QFutureWatcher<void>();
+    QFuture <void>future=QtConcurrent::run(this,&mainwindow::learn,date_open,date_close);
+    connect(m_futureWatcher, SIGNAL(finished()),this, SLOT(trade()));
+    m_futureWatcher->setFuture(future);
 
     // multy-threading ends here!!11111
-
-    ui->tradeW1->setText(ui->trainW1->text());
-    ui->tradeW2->setText(ui->trainW2->text());
-    ui->tradeW3->setText(ui->trainW3->text());
-    ui->tradeW4->setText(ui->trainW4->text());
-
-
-
-    date_open=find_first_date(ui->tradeFrom->date()),date_close=find_last_date(ui->tradeTo->date());
-    for (int i=date_open;i<=date_close;i++){
-        mas_ao[i][0]=ao(vector,i);
-        mas_ao[i][1]=ao(vector,i-7);
-        mas_ao[i][2]=ao(vector,i-14);
-        mas_ao[i][3]=ao(vector,i-21);
-        //printf("a1= %f a2= %f a3= %f a4= %f i= %d\n",mas_ao[i][0],mas_ao[i][1],mas_ao[i][2],mas_ao[i][3],i);
-    }
-   //Торговля
-   FILE* output_t=fopen("output_t.txt","w+");
-   double profit=0,d=0;
-   bool open=true,close=false;
-   int c=0;
-   fprintf(output_t,
-           "==========================\nCoefficients: w1=%d w2=%d w3=%d w4=%d\n===========================\n",
-           ui->tradeW1->text().toInt(),ui->tradeW2->text().toInt(),ui->tradeW3->text().toInt(),ui->tradeW4->text().toInt());
-   for (int i=date_open;i<=date_close;i++){
-                       d=mas_ao[i][0]*(100-ui->tradeW1->text().toInt())+mas_ao[i][1]*(100-ui->tradeW2->text().toInt())+
-                               mas_ao[i][2]*(100-ui->tradeW3->text().toInt())+mas_ao[i][3]*(100-ui->tradeW4->text().toInt());
-                       if (open==true){
-                          if (d>0){
-                             c++;
-                             profit=profit-vector[i]->open();
-                             open=false;
-                             close=true;
-                             fprintf(output_t,
-                                     "--------------------------------------------\nDeal id= %d:\nOpen number in a file of quotations %d, date: %s %s, open price - %f profit= %f\n",
-                                     c,i,vector[i]->date().toString("yyyy.MM.dd").toAscii().data(),vector[i]->time().toString("hh:mm").toAscii().data(),vector[i]->open(),profit);
-                          }
-                       }
-                       if (close==true){
-                          if (d<0){
-                             profit=profit+vector[i]->close();
-                             close=false;
-                             open=true;
-                             fprintf(output_t,
-                                     "Close number in a file of quotations %d %s %s close price= %f profit= %f\n",
-                                     i,vector[i]->date().toString("yyyy.MM.dd").toAscii().data(),vector[i]->time().toString("hh:mm").toAscii().data(),vector[i]->close(),profit);
-                          }
-                       }
-                       if ((close==true)&&(i==date_close)){
-                           profit=profit+vector[i]->close();
-                           close=false;
-                           open=true;
-                           fprintf(output_t,
-                                   "Close number in a file of quotations %d %s %s close price= %f profit= %f\n",
-                                   i,vector[i]->date().toString("yyyy.MM.dd").toAscii().data(),vector[i]->time().toString("hh:mm").toAscii().data(),vector[i]->close(),profit);
-
-                       }
-   }
-   fclose(output_t);
-   ui->tradeProfit->setText(QString::number(profit));
-
 }
 void mainwindow::learn(int date_open,int date_close){
     //нахождение всех необходимы коефициетвов осцилляторов для обучения
+    qDebug()<<"Training started";
     for (int i=date_open;i<=date_close;i++){
         mas_ao[i][0]=ao(vector,i);
         mas_ao[i][1]=ao(vector,i-7);
@@ -317,7 +190,70 @@ void mainwindow::learn(int date_open,int date_close){
        }
    }//*/
    QMetaObject::invokeMethod(this, "updateUI",Q_ARG(int,w1_max),Q_ARG(int,w2_max),Q_ARG(int,w3_max),Q_ARG(int,w4_max),Q_ARG(double,profit_max));
+   qDebug()<<"Training finished.";
 }
+void mainwindow::trade(){
+    qDebug()<<"signal received, trading";
+    int date_open=find_first_date(ui->tradeFrom->date()),date_close=find_last_date(ui->tradeTo->date());
+    ui->tradeW1->setText(ui->trainW1->text());
+    ui->tradeW2->setText(ui->trainW2->text());
+    ui->tradeW3->setText(ui->trainW3->text());
+    ui->tradeW4->setText(ui->trainW4->text());
+
+
+    for (int i=date_open;i<=date_close;i++){
+        mas_ao[i][0]=ao(vector,i);
+        mas_ao[i][1]=ao(vector,i-7);
+        mas_ao[i][2]=ao(vector,i-14);
+        mas_ao[i][3]=ao(vector,i-21);
+        //printf("a1= %f a2= %f a3= %f a4= %f i= %d\n",mas_ao[i][0],mas_ao[i][1],mas_ao[i][2],mas_ao[i][3],i);
+    }
+   //Торговля
+   FILE* output_t=fopen("output_t.txt","w+");
+   double profit=0,d=0;
+   bool open=true,close=false;
+   int c=0;
+   fprintf(output_t,
+           "==========================\nCoefficients: w1=%d w2=%d w3=%d w4=%d\n===========================\n",
+           ui->tradeW1->text().toInt(),ui->tradeW2->text().toInt(),ui->tradeW3->text().toInt(),ui->tradeW4->text().toInt());
+   for (int i=date_open;i<=date_close;i++){
+                       d=mas_ao[i][0]*(100-ui->tradeW1->text().toInt())+mas_ao[i][1]*(100-ui->tradeW2->text().toInt())+
+                               mas_ao[i][2]*(100-ui->tradeW3->text().toInt())+mas_ao[i][3]*(100-ui->tradeW4->text().toInt());
+                       if (open==true){
+                          if (d>0){
+                             c++;
+                             profit=profit-vector[i]->open();
+                             open=false;
+                             close=true;
+                             fprintf(output_t,
+                                     "--------------------------------------------\nDeal id= %d:\nOpen number in a file of quotations %d, date: %s %s, open price - %f profit= %f\n",
+                                     c,i,vector[i]->date().toString("yyyy.MM.dd").toAscii().data(),vector[i]->time().toString("hh:mm").toAscii().data(),vector[i]->open(),profit);
+                          }
+                       }
+                       if (close==true){
+                          if (d<0){
+                             profit=profit+vector[i]->close();
+                             close=false;
+                             open=true;
+                             fprintf(output_t,
+                                     "Close number in a file of quotations %d %s %s close price= %f profit= %f\n",
+                                     i,vector[i]->date().toString("yyyy.MM.dd").toAscii().data(),vector[i]->time().toString("hh:mm").toAscii().data(),vector[i]->close(),profit);
+                          }
+                       }
+                       if ((close==true)&&(i==date_close)){
+                           profit=profit+vector[i]->close();
+                           close=false;
+                           open=true;
+                           fprintf(output_t,
+                                   "Close number in a file of quotations %d %s %s close price= %f profit= %f\n",
+                                   i,vector[i]->date().toString("yyyy.MM.dd").toAscii().data(),vector[i]->time().toString("hh:mm").toAscii().data(),vector[i]->close(),profit);
+
+                       }
+   }
+   fclose(output_t);
+   ui->tradeProfit->setText(QString::number(profit));
+}
+
 void mainwindow::updateUI(int w1, int w2, int w3, int w4, double profit){
     ui->trainProfit->setText(QString::number(profit));
     ui->trainW1->setText(QString::number(w1));

@@ -4,6 +4,7 @@
 
 
 #include "bid.h"
+#include "outputwidget.h"
 
 #include <QDebug>
 #include <QDate>
@@ -20,6 +21,24 @@ mainwindow::mainwindow(QWidget *parent) :
     ui(new Ui::mainwindow)
 {
     ui->setupUi(this);
+
+
+    QFile file("/home/shf/Forex/csv/EURUSD60.csv");
+    file.open(QIODevice::ReadOnly);
+    while(!file.atEnd()){
+        vector.append(new bid(file.readLine()));
+    }
+
+    file.close();
+    /*ow=new outputWidget(0,find_first_date(ui->tradeFrom->date()),find_last_date(ui->tradeTo->date()));
+    ow->setBidsVector(vector);
+
+    ow->setDateStart(find_first_date(ui->tradeFrom->date()));
+    ow->setDateEnd(find_last_date(ui->tradeTo->date()));
+    ow->drawGraph();
+    ow->savePicture();
+    ow->show();
+    vector.clear();//*/
 
 }
 
@@ -41,29 +60,30 @@ double ao(QVector<bid*> vec,int ind){
 mainwindow::~mainwindow()
 {
     delete ui;
+    ow->hide();
 }
 
 void mainwindow::on_select_file_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this,tr("Open File"), ".", "");
-    QFile file(fileName);
-    if(!file.open(QIODevice::ReadOnly)){
-        qDebug() << tr("Open file error.");
-        return;
+    if (fileName!=NULL){
+        QFile file(fileName);
+        if(!file.open(QIODevice::ReadOnly)){
+            qDebug() << tr("Open file error.");
+            return;
+        }
+        ui->select_file_label->setText("Selected file: "+fileName);
+        while(!file.atEnd()){
+            vector.append(new bid(file.readLine()));
+        }
+
+        file.close();
+
+        mas_ao=(double**)calloc(vector.size(),sizeof(double*));
+        for(int i=0;i<vector.size();i++){
+            mas_ao[i]=(double*)calloc(4,sizeof(double));
+        }
     }
-    ui->select_file_label->setText("Selected file: "+fileName);
-    while(!file.atEnd()){
-        vector.append(new bid(file.readLine()));
-    }
-
-    file.close();
-
-    mas_ao=(double**)calloc(vector.size(),sizeof(double*));
-    for(int i=0;i<vector.size();i++){
-        mas_ao[i]=(double*)calloc(4,sizeof(double));
-    }
-
-
 }
 
 
@@ -200,6 +220,14 @@ void mainwindow::trade(){
     ui->tradeW3->setText(ui->trainW3->text());
     ui->tradeW4->setText(ui->trainW4->text());
 
+    ow=new outputWidget(0,find_first_date(ui->tradeFrom->date()),find_last_date(ui->tradeTo->date()));
+    ow->setBidsVector(vector);
+
+    ow->setDateStart(find_first_date(ui->tradeFrom->date()));
+    ow->setDateEnd(find_last_date(ui->tradeTo->date()));
+    ow->drawGraph();
+    ow->show();
+
 
     for (int i=date_open;i<=date_close;i++){
         mas_ao[i][0]=ao(vector,i);
@@ -209,10 +237,11 @@ void mainwindow::trade(){
         //printf("a1= %f a2= %f a3= %f a4= %f i= %d\n",mas_ao[i][0],mas_ao[i][1],mas_ao[i][2],mas_ao[i][3],i);
     }
    //Торговля
-   FILE* output_t=fopen("output_t.txt","w+");
+    FILE* output_t=fopen(QString(QDate::currentDate().toString("dd.MM.yyyy")+"_"+QTime::currentTime().toString("HH.mm")+".txt").toAscii(),"w+");
    double profit=0,d=0;
    bool open=true,close=false;
    int c=0;
+   ow->printText(QString("Coefficients: w1="+ui->tradeW1->text()+" w2="+ui->tradeW2->text()+" w3="+ui->tradeW3->text()+" w4="+ui->tradeW4->text()));
    fprintf(output_t,
            "==========================\nCoefficients: w1=%d w2=%d w3=%d w4=%d\n===========================\n",
            ui->tradeW1->text().toInt(),ui->tradeW2->text().toInt(),ui->tradeW3->text().toInt(),ui->tradeW4->text().toInt());
@@ -228,6 +257,9 @@ void mainwindow::trade(){
                              fprintf(output_t,
                                      "--------------------------------------------\nDeal id= %d:\nOpen number in a file of quotations %d, date: %s %s, open price - %f profit= %f\n",
                                      c,i,vector[i]->date().toString("yyyy.MM.dd").toAscii().data(),vector[i]->time().toString("hh:mm").toAscii().data(),vector[i]->open(),profit);
+                             ow->printText(QString("--------------------------------------------"));
+                             ow->printText(QString("Deal id= "+QString::number(c)));
+                             ow->printText(QString("Open number in a file of quotations - "+QString::number(i)+", date:"+vector[i]->date().toString("yyyy.MM.dd")+" "+vector[i]->time().toString("hh.mm")+", open price - "+QString::number(vector[i]->open())+" profit= "+QString::number(profit)));
                           }
                        }
                        if (close==true){
@@ -238,6 +270,7 @@ void mainwindow::trade(){
                              fprintf(output_t,
                                      "Close number in a file of quotations %d %s %s close price= %f profit= %f\n",
                                      i,vector[i]->date().toString("yyyy.MM.dd").toAscii().data(),vector[i]->time().toString("hh:mm").toAscii().data(),vector[i]->close(),profit);
+                             ow->printText(QString("Close number in a file of quotations - "+QString::number(i)+",date:"+vector[i]->date().toString("yyyy.MM.dd")+" "+vector[i]->time().toString("hh.mm")+", close price - "+QString::number(vector[i]->close())+" profit= "+QString::number(profit)));
                           }
                        }
                        if ((close==true)&&(i==date_close)){
@@ -247,10 +280,12 @@ void mainwindow::trade(){
                            fprintf(output_t,
                                    "Close number in a file of quotations %d %s %s close price= %f profit= %f\n",
                                    i,vector[i]->date().toString("yyyy.MM.dd").toAscii().data(),vector[i]->time().toString("hh:mm").toAscii().data(),vector[i]->close(),profit);
+                           ow->printText(QString("Close number in a file of quotations "+QString::number(i)+",date:"+vector[i]->date().toString("yyyy.MM.dd")+" "+vector[i]->time().toString("hh.mm")+", close price - "+QString::number(vector[i]->close())+" profit= "+QString::number(profit)));
 
                        }
    }
    fclose(output_t);
+   ow->savePicture();
    ui->tradeProfit->setText(QString::number(profit));
 }
 

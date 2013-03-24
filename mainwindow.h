@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QFileDialog>
 
+#include "outputwidget.h"
 #include "bid.h"
 
 namespace Ui {
@@ -18,7 +19,7 @@ class mainwindow : public QMainWindow
 public:
     explicit mainwindow(QWidget *parent = 0);
     ~mainwindow();
-    
+    outputWidget *ow;
 private slots:
     int find_date(QDate);
     int find_first_date(QDate);

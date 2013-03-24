@@ -93,14 +93,14 @@ void outputWidget::drawGraph(){
     // open >= close = black
     for (int i=60; i<(date_end-date_start)*25+40;i+=25){
         // top and bottom
-        p.drawLine((double)i,vector[date_start+c]->low()*200.0+30.0,(double)i,vector[date_start+c]->open()*200.0+30.0);
-        p.drawLine((double)i,vector[date_start+c]->close()*200.0+30.0,(double)i,vector[date_start+c]->high()*200.0+30.0);
+        p.drawLine((double)i,(2-vector[date_start+c]->low())*200.0+30.0,(double)i,(2-vector[date_start+c]->open())*200.0+30.0);
+        p.drawLine((double)i,(2-vector[date_start+c]->close())*200.0+30.0,(double)i,(2-vector[date_start+c]->high())*200.0+30.0);
         // candle body
         if (vector[date_start+c]->open()>=vector[date_start+c]->close()){
-            p.drawRect(i-10,vector[date_start+c]->close()*200.0+30.0,20,qAbs(vector[date_start+c]->open()-vector[date_start+c]->close())*200.0);
-            p.fillRect(i-10,vector[date_start+c]->close()*200.0+30.0,20,qAbs(vector[date_start+c]->open()-vector[date_start+c]->close())*200.0,Qt::SolidPattern);
+            p.drawRect(i-10,(2-vector[date_start+c]->close())*200.0+30.0,20,qAbs(vector[date_start+c]->open()-vector[date_start+c]->close())*200.0);
+            p.fillRect(i-10,(2-vector[date_start+c]->close())*200.0+30.0,20,qAbs(vector[date_start+c]->open()-vector[date_start+c]->close())*200.0,Qt::SolidPattern);
         }
-        else p.drawRect(i-10,vector[date_start+c]->close()*200.0+30.0,20,qAbs(vector[date_start+c]->open()-vector[date_start+c]->close())*200.0);
+        else p.drawRect(i-10,(2-vector[date_start+c]->close())*200.0+30.0,20,qAbs(vector[date_start+c]->open()-vector[date_start+c]->close())*200.0);
         c++;
     }
 

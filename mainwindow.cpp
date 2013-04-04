@@ -23,19 +23,20 @@ mainwindow::mainwindow(QWidget *parent) :
     ui->setupUi(this);
 
 
-    QFile file("/home/shf/Forex/csv/EURUSD60.csv");
+    /*QFile file("./csv/EURUSD60.csv");
     file.open(QIODevice::ReadOnly);
     while(!file.atEnd()){
         vector.append(new bid(file.readLine()));
     }
 
     file.close();
-    /*ow=new outputWidget(0,find_first_date(ui->tradeFrom->date()),find_last_date(ui->tradeTo->date()));
+    ow=new outputWidget(0,find_first_date(ui->tradeFrom->date()),find_last_date(ui->tradeTo->date()));
     ow->setBidsVector(vector);
 
     ow->setDateStart(find_first_date(ui->tradeFrom->date()));
     ow->setDateEnd(find_last_date(ui->tradeTo->date()));
     ow->drawGraph();
+    ow->drawDeal(find_first_date(ui->tradeFrom->date())+4,"Deal 1 opens",Qt::blue);
     ow->savePicture();
     ow->show();
     vector.clear();//*/
@@ -226,7 +227,7 @@ void mainwindow::trade(){
     ow->setDateStart(find_first_date(ui->tradeFrom->date()));
     ow->setDateEnd(find_last_date(ui->tradeTo->date()));
     ow->drawGraph();
-    ow->show();
+    ow->show();//*/
 
 
     for (int i=date_open;i<=date_close;i++){
@@ -260,6 +261,7 @@ void mainwindow::trade(){
                              ow->printText(QString("--------------------------------------------"));
                              ow->printText(QString("Deal id= "+QString::number(c)));
                              ow->printText(QString("Open number in a file of quotations - "+QString::number(i)+", date:"+vector[i]->date().toString("yyyy.MM.dd")+" "+vector[i]->time().toString("hh.mm")+", open price - "+QString::number(vector[i]->open())+" profit= "+QString::number(profit)));
+                             ow->drawDeal(i,"Deal"+QString::number(c)+" opens",Qt::blue);
                           }
                        }
                        if (close==true){
@@ -271,6 +273,7 @@ void mainwindow::trade(){
                                      "Close number in a file of quotations %d %s %s close price= %f profit= %f\n",
                                      i,vector[i]->date().toString("yyyy.MM.dd").toAscii().data(),vector[i]->time().toString("hh:mm").toAscii().data(),vector[i]->close(),profit);
                              ow->printText(QString("Close number in a file of quotations - "+QString::number(i)+",date:"+vector[i]->date().toString("yyyy.MM.dd")+" "+vector[i]->time().toString("hh.mm")+", close price - "+QString::number(vector[i]->close())+" profit= "+QString::number(profit)));
+                             ow->drawDeal(i,"Deal"+QString::number(c)+" closes",Qt::black);
                           }
                        }
                        if ((close==true)&&(i==date_close)){

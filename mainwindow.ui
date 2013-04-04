@@ -25,8 +25,8 @@
         <widget class="QDateEdit" name="tradeFrom">
          <property name="date">
           <date>
-           <year>2010</year>
-           <month>7</month>
+           <year>2009</year>
+           <month>9</month>
            <day>25</day>
           </date>
          </property>
@@ -98,8 +98,8 @@
         <widget class="QDateEdit" name="tradeTo">
          <property name="date">
           <date>
-           <year>2010</year>
-           <month>8</month>
+           <year>2009</year>
+           <month>10</month>
            <day>25</day>
           </date>
          </property>
@@ -162,8 +162,8 @@
         <widget class="QDateEdit" name="trainFrom">
          <property name="date">
           <date>
-           <year>2010</year>
-           <month>1</month>
+           <year>2009</year>
+           <month>7</month>
            <day>25</day>
           </date>
          </property>
@@ -245,8 +245,8 @@
         <widget class="QDateEdit" name="trainTo">
          <property name="date">
           <date>
-           <year>2010</year>
-           <month>6</month>
+           <year>2009</year>
+           <month>9</month>
            <day>25</day>
           </date>
          </property>

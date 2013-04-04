@@ -33,7 +33,7 @@ public slots:
     void setDateStart(int date);
     void setDateEnd(int date);
     void drawGraph();
-    void drawDeal(int num,QString txt);
+    void drawDeal(int num,QString txt, QColor color);
     void printText(QString txt);
     void savePicture();
     

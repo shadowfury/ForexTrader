@@ -23,6 +23,8 @@ mainwindow::mainwindow(QWidget *parent) :
     ui->setupUi(this);
 
 
+
+    //ow=new outputWidget(0,0,0);
     /*QFile file("./csv/EURUSD60.csv");
     file.open(QIODevice::ReadOnly);
     while(!file.atEnd()){
@@ -30,16 +32,20 @@ mainwindow::mainwindow(QWidget *parent) :
     }
 
     file.close();
+    ow=new outputWidget(0,0,0);
     ow=new outputWidget(0,find_first_date(ui->tradeFrom->date()),find_last_date(ui->tradeTo->date()));
     ow->setBidsVector(vector);
 
     ow->setDateStart(find_first_date(ui->tradeFrom->date()));
     ow->setDateEnd(find_last_date(ui->tradeTo->date()));
+    ow->repaintBlankImage();
     ow->drawGraph();
     ow->drawDeal(find_first_date(ui->tradeFrom->date())+4,"Deal 1 opens",Qt::blue);
     ow->savePicture();
     ow->show();
     vector.clear();//*/
+
+
 
 }
 
@@ -222,10 +228,11 @@ void mainwindow::trade(){
     ui->tradeW4->setText(ui->trainW4->text());
 
     ow=new outputWidget(0,find_first_date(ui->tradeFrom->date()),find_last_date(ui->tradeTo->date()));
-    ow->setBidsVector(vector);
 
     ow->setDateStart(find_first_date(ui->tradeFrom->date()));
     ow->setDateEnd(find_last_date(ui->tradeTo->date()));
+    ow->setBidsVector(vector);
+    ow->repaintBlankImage();
     ow->drawGraph();
     ow->show();//*/
 

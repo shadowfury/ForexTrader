@@ -7,7 +7,8 @@
 #include <QTextEdit>
 #include <QGridLayout>
 #include <QScrollArea>
-
+#include "eventfilter.h"
+#include "tooltipwidget.h"
 #include "bid.h"
 
 class outputWidget : public QWidget
@@ -23,6 +24,8 @@ class outputWidget : public QWidget
 
     QVector<bid*> vector;
     int date_start,date_end;
+
+
 public:
     explicit outputWidget(QWidget *parent = 0,int date_s=0,int date_e=0);
     
@@ -36,6 +39,7 @@ public slots:
     void drawDeal(int num,QString txt, QColor color);
     void printText(QString txt);
     void savePicture();
+    void repaintBlankImage();
     
 };
 

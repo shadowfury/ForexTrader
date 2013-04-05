@@ -32,13 +32,19 @@ outputWidget::outputWidget(QWidget *parent,int date_s,int date_e) :
 
     scroll->setWidget(scrollWidget);
     bids=new QTextEdit(this);
+    this->setLayout(layout);
 
     layout->addWidget(scroll,0,0,8,2);
     layout->addWidget(bids,8,0,1,2);
 
+    //picLabel->installEventFilter();
 
-    date_start=0;
-    date_end=0;
+
+
+
+
+    //date_start=0;
+    //date_end=0;
 
 }
 
@@ -57,7 +63,7 @@ void outputWidget::setDateEnd(int date){
 
 void outputWidget::drawGraph(){
 
-    double min_value=999, max_value=0;
+    double min_value=999,max_value=0;
     for (int i=date_start;i<date_end;i++){
         double tmp_min=qMin(qMin(vector[i]->open(),vector[i]->close()),qMin(vector[i]->high(),vector[i]->low()));
         double tmp_max=qMax(qMax(vector[i]->open(),vector[i]->close()),qMax(vector[i]->high(),vector[i]->low()));
@@ -65,7 +71,8 @@ void outputWidget::drawGraph(){
         if (max_value <= tmp_max) max_value=tmp_max;
     }
     double diff=400/(max_value-min_value);
-    QPainter p(img);
+    QImage tmp_img=picLabel->pixmap()->toImage();
+    QPainter p(&tmp_img);
     p.setPen(QPen(Qt::black));
 
     /*
@@ -126,10 +133,30 @@ void outputWidget::drawGraph(){
         p.setPen(QPen(Qt::black));
     }
     p.end();
-    picLabel->setPixmap(QPixmap::fromImage(*img));
+    picLabel->setPixmap(QPixmap::fromImage(tmp_img));
+
+
+
+    // adding tooltip widget
+    eventfilter *hoverFilter = new eventfilter(this);
+
+    tooltipWidget *tw= new tooltipWidget();
+    tw->Y_Axis_setPixSize(430);
+    tw->Y_Axis_setMinVal(min_value);
+    tw->Y_Axis_setDiff(diff);
+    tw->X_Axis_setPixShift(60);
+    tw->X_Axis_setStartIndice(date_start);
+    tw->X_Axis_setStepVal(25);
+    tw->setBidsVector(vector);
+    tw->hide();
+    hoverFilter->setToolTipWidget(tw);
+
+    picLabel->setMouseTracking(true);
+    picLabel->installEventFilter(hoverFilter);
 }
 void outputWidget::drawDeal(int num,QString txt, QColor color){
-    QPainter p(img);
+    QImage tmp_img=picLabel->pixmap()->toImage();
+    QPainter p(&tmp_img);
     p.setPen(QPen(color));
     p.drawText(45+(num-date_start)*25-5,15,txt);
 
@@ -137,11 +164,16 @@ void outputWidget::drawDeal(int num,QString txt, QColor color){
     p.drawEllipse(80+(num-date_start)*25-5,20,10,10);
 
     p.end();
-    picLabel->setPixmap(QPixmap::fromImage(*img));
+    picLabel->setPixmap(QPixmap::fromImage(tmp_img));
 
 
 }
 
+void outputWidget::repaintBlankImage(){
+    QImage *tmp_img=new QImage((date_end-date_start)*25+80,600,QImage::Format_RGB32);
+    tmp_img->fill(Qt::white);
+    picLabel->setPixmap(QPixmap::fromImage(*tmp_img));
+}
 
 void outputWidget::printText(QString txt){
     bids->append(txt);

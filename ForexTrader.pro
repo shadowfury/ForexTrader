@@ -16,10 +16,14 @@ UI_DIR=garbage
 SOURCES += main.cpp\
         mainwindow.cpp \
     bid.cpp \
-    outputwidget.cpp
+    outputwidget.cpp \
+    eventfilter.cpp \
+    tooltipwidget.cpp
 
 HEADERS  += mainwindow.h \
     bid.h \
-    outputwidget.h
+    outputwidget.h \
+    eventfilter.h \
+    tooltipwidget.h
 
 FORMS    += mainwindow.ui

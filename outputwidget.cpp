@@ -121,8 +121,8 @@ void outputWidget::drawGraph(){
         // candle body
         if (vector[date_start+c]->open()>=vector[date_start+c]->close()){
             p.setPen(QPen(Qt::red));
-            p.drawRect(i-10,430-(vector[date_start+c]->close()-min_value)*diff ,20,qAbs(430-(vector[date_start+c]->open()-min_value)*diff-(430-(vector[date_start+c]->close()-min_value)*diff)));
-            p.fillRect(i-10,430-(vector[date_start+c]->close()-min_value)*diff,20,qAbs(430-(vector[date_start+c]->open()-min_value)*diff-(430-(vector[date_start+c]->close()-min_value)*diff)),QColor(255,0,0));
+            p.drawRect(i-10,430-(vector[date_start+c]->open()-min_value)*diff ,20,qAbs(430-(vector[date_start+c]->open()-min_value)*diff-(430-(vector[date_start+c]->close()-min_value)*diff)));
+            p.fillRect(i-10,430-(vector[date_start+c]->open()-min_value)*diff,20,qAbs(430-(vector[date_start+c]->open()-min_value)*diff-(430-(vector[date_start+c]->close()-min_value)*diff)),QColor(255,0,0));
         }
         else{
             p.setPen(QPen(Qt::blue));
